@@ -32,44 +32,113 @@ app.get('/api/search', async (req, res) => {
       return res.status(400).json({ error: 'Query parameter is required' });
     }
 
-    // API Ninjas Amazon Product Search
-    const amazonResponse = await axios.get('https://api.api-ninjas.com/v1/amazonsearch', {
-      params: { query },
-      headers: {
-        'X-Api-Key': process.env.API_NINJAS_KEY || 'YOUR_API_KEY_HERE'
-      }
-    });
-
-    const products = amazonResponse.data;
+    // For testing - use mock data first, then try real API
+    console.log(`Searching for: ${query} in currency: ${currency}`);
     
-    // Convert prices to target currency if not USD
-    let exchangeRate = 1;
-    if (currency !== 'USD') {
-      try {
-        const exchangeResponse = await axios.get(`https://api.frankfurter.app/latest?from=USD&to=${currency}`);
-        exchangeRate = exchangeResponse.data.rates[currency];
-      } catch (exchangeError) {
-        console.warn('Exchange rate API error:', exchangeError.message);
+    try {
+      // API Ninjas Amazon Product Search
+      const amazonResponse = await axios.get('https://api.api-ninjas.com/v1/amazonsearch', {
+        params: { query },
+        headers: {
+          'X-Api-Key': process.env.API_NINJAS_KEY || 'YOUR_API_KEY_HERE'
+        },
+        timeout: 5000 // 5 second timeout
+      });
+
+      const products = amazonResponse.data;
+      console.log('API Response received:', products.length, 'products');
+      
+      // Convert prices to target currency if not USD
+      let exchangeRate = 1;
+      if (currency !== 'USD') {
+        try {
+          const exchangeResponse = await axios.get(`https://api.frankfurter.app/latest?from=USD&to=${currency}`);
+          exchangeRate = exchangeResponse.data.rates[currency];
+        } catch (exchangeError) {
+          console.warn('Exchange rate API error:', exchangeError.message);
+        }
       }
+
+      // Process products with currency conversion
+      const processedProducts = products.map((product, index) => ({
+        id: `${Date.now()}-${index}`,
+        name: product.title || product.name || 'Unknown Product',
+        price: product.price ? (parseFloat(product.price.replace('$', '')) * exchangeRate).toFixed(2) : 'N/A',
+        originalPrice: product.price || 'N/A',
+        currency: currency,
+        image: product.image || '/placeholder-image.png',
+        url: product.url || '#',
+        vendor: 'Amazon'
+      }));
+
+      res.json({
+        products: processedProducts,
+        currency: currency,
+        exchangeRate: exchangeRate
+      });
+
+    } catch (apiError) {
+      console.log('API Error, using mock data:', apiError.message);
+      
+      // Fallback to mock data if API fails
+      const mockProducts = [
+        {
+          id: `mock-${Date.now()}-1`,
+          name: `${query} - Premium Model`,
+          price: '99.99',
+          originalPrice: '$99.99',
+          currency: currency,
+          image: 'https://via.placeholder.com/300x300?text=Product+1',
+          url: '#',
+          vendor: 'Demo Store'
+        },
+        {
+          id: `mock-${Date.now()}-2`,
+          name: `${query} - Standard Edition`,
+          price: '79.99',
+          originalPrice: '$79.99',
+          currency: currency,
+          image: 'https://via.placeholder.com/300x300?text=Product+2',
+          url: '#',
+          vendor: 'Demo Store'
+        },
+        {
+          id: `mock-${Date.now()}-3`,
+          name: `${query} - Budget Option`,
+          price: '49.99',
+          originalPrice: '$49.99',
+          currency: currency,
+          image: 'https://via.placeholder.com/300x300?text=Product+3',
+          url: '#',
+          vendor: 'Demo Store'
+        }
+      ];
+
+      // Convert mock prices to target currency
+      let exchangeRate = 1;
+      if (currency !== 'USD') {
+        try {
+          const exchangeResponse = await axios.get(`https://api.frankfurter.app/latest?from=USD&to=${currency}`);
+          exchangeRate = exchangeResponse.data.rates[currency];
+          
+          // Update mock product prices
+          mockProducts.forEach(product => {
+            const usdPrice = parseFloat(product.price);
+            product.price = (usdPrice * exchangeRate).toFixed(2);
+            product.currency = currency;
+          });
+        } catch (exchangeError) {
+          console.warn('Exchange rate API error:', exchangeError.message);
+        }
+      }
+
+      res.json({
+        products: mockProducts,
+        currency: currency,
+        exchangeRate: exchangeRate,
+        note: 'Demo data - API key may need verification'
+      });
     }
-
-    // Process products with currency conversion
-    const processedProducts = products.map((product, index) => ({
-      id: `${Date.now()}-${index}`,
-      name: product.title || product.name || 'Unknown Product',
-      price: product.price ? (parseFloat(product.price.replace('$', '')) * exchangeRate).toFixed(2) : 'N/A',
-      originalPrice: product.price || 'N/A',
-      currency: currency,
-      image: product.image || '/placeholder-image.png',
-      url: product.url || '#',
-      vendor: 'Amazon'
-    }));
-
-    res.json({
-      products: processedProducts,
-      currency: currency,
-      exchangeRate: exchangeRate
-    });
 
   } catch (error) {
     console.error('Search API error:', error.message);
