@@ -81,6 +81,80 @@ app.get('/api/search', async (req, res) => {
       console.log('API Error, using mock data:', apiError.message);
       
       // Fallback to mock data if API fails
+      const getRelevantImages = (searchQuery) => {
+        const query = searchQuery.toLowerCase();
+        
+        // Define image mappings based on search terms
+        const imageMap = {
+          'laptop': [
+            'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=300&h=300&fit=crop'
+          ],
+          'headphones': [
+            'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=300&h=300&fit=crop'
+          ],
+          'phone': [
+            'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=300&h=300&fit=crop'
+          ],
+          'watch': [
+            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1508057198894-247b23fe5ade?w=300&h=300&fit=crop'
+          ],
+          'camera': [
+            'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=300&h=300&fit=crop'
+          ],
+          'keyboard': [
+            'https://images.unsplash.com/photo-1541140532154-b024d705b90a?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=300&h=300&fit=crop'
+          ],
+          'mouse': [
+            'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=300&h=300&fit=crop'
+          ],
+          'tablet': [
+            'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1585789575418-16a7d4b5e82c?w=300&h=300&fit=crop'
+          ],
+          'speaker': [
+            'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1507646227500-4d389b0012be?w=300&h=300&fit=crop'
+          ],
+          'chair': [
+            'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1549497538-303791108f95?w=300&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=300&h=300&fit=crop'
+          ]
+        };
+        
+        // Find matching category
+        for (const [category, images] of Object.entries(imageMap)) {
+          if (query.includes(category)) {
+            return images;
+          }
+        }
+        
+        // Default generic product images if no match
+        return [
+          'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop',
+          'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop',
+          'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop'
+        ];
+      };
+      
+      const relevantImages = getRelevantImages(query);
+      
       const mockProducts = [
         {
           id: `mock-${Date.now()}-1`,
@@ -88,7 +162,7 @@ app.get('/api/search', async (req, res) => {
           price: '99.99',
           originalPrice: '$99.99',
           currency: currency,
-          image: 'https://via.placeholder.com/300x300?text=Product+1',
+          image: relevantImages[0],
           url: '#',
           vendor: 'Demo Store'
         },
@@ -98,7 +172,7 @@ app.get('/api/search', async (req, res) => {
           price: '79.99',
           originalPrice: '$79.99',
           currency: currency,
-          image: 'https://via.placeholder.com/300x300?text=Product+2',
+          image: relevantImages[1],
           url: '#',
           vendor: 'Demo Store'
         },
@@ -108,7 +182,7 @@ app.get('/api/search', async (req, res) => {
           price: '49.99',
           originalPrice: '$49.99',
           currency: currency,
-          image: 'https://via.placeholder.com/300x300?text=Product+3',
+          image: relevantImages[2],
           url: '#',
           vendor: 'Demo Store'
         }

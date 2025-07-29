@@ -121,7 +121,7 @@ function displayProducts(products, currency) {
         
         productCard.innerHTML = `
             <img src="${product.image}" alt="${product.name}" class="product-image" 
-                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI2Y4ZjlmYSIvPgo8dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZhNzM3ZCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTRweCI+Tm8gSW1hZ2U8L3RleHQ+Cjwvc3ZnPg=='">
+                 onerror="this.src='/placeholder.svg'; this.onerror=null;">
             <div class="product-info">
                 <h3 class="product-name">${product.name}</h3>
                 <div class="product-price">${product.price} ${product.currency}</div>
