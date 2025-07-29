@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Shopper - Global Price & Budget Assistant</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-title">Smart Shopper</h1>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/results">Results</a></li>
+        <li><a href="/watchlist">Watchlist <span id="watchlist-count">(0)</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="hero-section">
+      <h2>Global Price & Budget Assistant</h2>
+      <p>Search for products and compare prices across different currencies. Perfect for travelers, freelancers, and international shoppers!</p>
+    </div>
+
+    <div class="search-container">
+      <form id="searchForm" class="search-form">
+        <div class="form-group">
+          <label for="productInput">Search for a product:</label>
+          <input type="text" id="productInput" placeholder="e.g., wireless headphones, laptop..." required />
+        </div>
+        
+        <div class="form-group">
+          <label for="currencySelect">Preferred Currency:</label>
+          <select id="currencySelect" required>
+            <option value="USD">USD - US Dollar</option>
+            <option value="CAD">CAD - Canadian Dollar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="JPY">JPY - Japanese Yen</option>
+            <option value="AUD">AUD - Australian Dollar</option>
+            <option value="INR">INR - Indian Rupee</option>
+          </select>
+        </div>
+
+        <button type="submit" class="search-btn">
+          <span class="btn-text">Search Products</span>
+          <span class="btn-loading" style="display: none;">Searching...</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="features-section">
+      <h3>Features</h3>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h4>🛒 Product Search</h4>
+          <p>Search for products from Amazon and get real-time pricing information</p>
+        </div>
+        <div class="feature-card">
+          <h4>💱 Currency Conversion</h4>
+          <p>Convert prices to your preferred currency using live exchange rates</p>
+        </div>
+        <div class="feature-card">
+          <h4>📋 Watchlist</h4>
+          <p>Save products to your watchlist and track your total spending</p>
+        </div>
+        <div class="feature-card">
+          <h4>💰 Budget Tracking</h4>
+          <p>Set a budget and get notified when you exceed your limit</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="home.js"></script>
+</body>
+</html>

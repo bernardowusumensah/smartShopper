@@ -1,0 +1,107 @@
+
+Application Overview
+Smart Shopper is a 3-page web application that helps users search for products, compare prices across currencies, and manage a budget-aware watchlist.
+
+Application Flow
+1. Home Page (/)
+Purpose: Entry point for product searches
+User Experience: Clean interface with search form and feature overview
+Key Elements:
+Product search input field
+Currency selection dropdown (USD, CAD, EUR, GBP, JPY, AUD, INR)
+Feature cards explaining app capabilities
+2. Results Page (/results)
+Purpose: Display search results with price conversions
+Data Flow:
+Receives search query and currency from URL parameters
+Makes API call to backend /api/search endpoint
+Backend calls API Ninjas Amazon Search API
+Backend calls Frankfurter API for currency conversion
+Displays product cards with converted prices
+User Actions:
+Add/remove products from watchlist
+View products on Amazon
+Perform new searches
+3. Watchlist Page (/watchlist)
+Purpose: Manage saved products and budget tracking
+Features:
+Display all watchlisted products
+Set and monitor budget with visual progress bar
+Sort products by name, price, or date added
+Calculate total cost and remaining budget
+Technical Architecture
+Backend (Node.js/Express)
+Server Structure (server.js):
+
+Key API Operations:
+
+Product Search (/api/search):
+Frontend Architecture
+Page-Specific JavaScript Files:
+
+home.js:
+
+Handles search form submission
+Manages currency preferences
+Updates watchlist count in navigation
+results.js:
+
+Performs product searches via API calls
+Manages loading states and error handling
+Handles watchlist add/remove operations
+Updates UI dynamically
+watchlist.js:
+
+Loads and displays watchlist from localStorage
+Implements budget setting and tracking
+Provides sorting and filtering functionality
+Calculates totals and budget progress
+Data Storage Strategy
+LocalStorage Usage:
+
+API Integration Details
+1. API Ninjas Amazon Search
+Purpose: Fetch product data from Amazon
+Request: GET https://api.api-ninjas.com/v1/amazonsearch?query={searchTerm}
+Response: Array of products with title, price, image, URL
+Rate Limit: 50,000 requests/month (free tier)
+2. Frankfurter Exchange API
+Purpose: Real-time currency conversion
+Request: GET https://api.frankfurter.app/latest?from=USD&to={targetCurrency}
+Response: Current exchange rates
+Rate Limit: No authentication required, reasonable usage
+User Interaction Flow
+Search and Discovery:
+User enters product search term
+Selects preferred currency
+System fetches products from Amazon API
+Prices automatically converted to selected currency
+Results displayed in responsive grid layout
+Watchlist Management:
+User clicks "Add to Watchlist" on any product
+Product saved to browser's localStorage
+Watchlist count updated across all pages
+User can view, sort, and manage saved products
+Budget Tracking:
+User sets budget amount and currency
+System calculates total cost of watchlisted items
+Visual progress bar shows budget utilization
+Alerts displayed when budget exceeded
+Key Features Explained
+Currency Conversion Logic:
+Responsive Design:
+Mobile-first CSS approach
+Flexible grid layouts that adapt to screen size
+Touch-friendly buttons and navigation
+Optimized images and loading states
+Error Handling:
+API failure fallbacks (graceful degradation)
+User-friendly error messages
+Loading states for better UX
+Input validation and sanitization
+Performance Considerations:
+Efficient localStorage usage
+Optimized API calls (caching where appropriate)
+Lazy loading for images
+Minimal JavaScript bundles (vanilla JS, no frameworks)
+This architecture provides a smooth, responsive user experience while maintaining simplicity and reliability. The application can work offline for watchlist management (since data is stored locally) and provides real-time pricing when online.

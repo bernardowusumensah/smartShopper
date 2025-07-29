@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Results - Smart Shopper</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-title">Smart Shopper</h1>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/results" class="active">Results</a></li>
+        <li><a href="/watchlist">Watchlist <span id="watchlist-count">(0)</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="search-header">
+      <form id="searchForm" class="search-form compact">
+        <input type="text" id="productInput" placeholder="Search for a product..." required />
+        <select id="currencySelect" required>
+          <option value="USD">USD</option>
+          <option value="CAD">CAD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+          <option value="JPY">JPY</option>
+          <option value="AUD">AUD</option>
+          <option value="INR">INR</option>
+        </select>
+        <button type="submit" class="search-btn">
+          <span class="btn-text">Search</span>
+          <span class="btn-loading" style="display: none;">Searching...</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="search-info" id="searchInfo" style="display: none;">
+      <p>Showing results for: <strong id="searchQuery"></strong></p>
+      <p>Currency: <strong id="selectedCurrency"></strong></p>
+    </div>
+
+    <div class="loading" id="loading" style="display: none;">
+      <div class="spinner"></div>
+      <p>Searching for products...</p>
+    </div>
+
+    <div class="error-message" id="errorMessage" style="display: none;">
+      <p>Sorry, we couldn't find any products. Please try a different search term.</p>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- Products will be populated here -->
+    </div>
+
+    <div class="currency-info" id="currencyInfo" style="display: none;">
+      <p><small>Prices converted using live exchange rates from Frankfurter API</small></p>
+    </div>
+  </main>
+
+  <script src="results.js"></script>
+</body>
+</html>
