@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Shopper - Global Price & Budget Assistant</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <h1 class="nav-title">Smart Shopper</h1>
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+        <li><a href="#results" class="nav-link" data-section="results">Results</a></li>
+        <li><a href="#watchlist" class="nav-link" data-section="watchlist">Watchlist <span id="watchlist-count">(0)</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HOME SECTION -->
+  <main id="home-section" class="section active">
+    <div class="main-content">
+      <div class="hero-section">
+        <h2>Global Price & Budget Assistant</h2>
+        <p>Search for products and compare prices across different currencies. Perfect for travelers, freelancers, and international shoppers!</p>
+        <div class="demo-notice">
+          <p><strong>Demo Mode:</strong> This version uses sample data for GitHub Pages hosting. The full version with live APIs is available in the repository.</p>
+        </div>
+      </div>
+
+      <div class="search-container">
+        <form id="searchForm" class="search-form">
+          <div class="form-group">
+            <label for="productInput">Search for a product:</label>
+            <input type="text" id="productInput" placeholder="e.g., wireless headphones, laptop..." required />
+          </div>
+          
+          <div class="form-group">
+            <label for="currencySelect">Preferred Currency:</label>
+            <select id="currencySelect" required>
+              <option value="USD">USD - US Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="INR">INR - Indian Rupee</option>
+            </select>
+          </div>
+
+          <button type="submit" class="search-btn">
+            <span class="btn-text">Search Products</span>
+            <span class="btn-loading" style="display: none;">Searching...</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="features-section">
+        <h3>Features</h3>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h4>🛒 Product Search</h4>
+            <p>Search for products and get pricing information with demo data</p>
+          </div>
+          <div class="feature-card">
+            <h4>💱 Currency Conversion</h4>
+            <p>Convert prices to your preferred currency using simulated exchange rates</p>
+          </div>
+          <div class="feature-card">
+            <h4>📋 Watchlist</h4>
+            <p>Save products to your watchlist and track your total spending</p>
+          </div>
+          <div class="feature-card">
+            <h4>💰 Budget Tracking</h4>
+            <p>Set a budget and get notified when you exceed your limit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- RESULTS SECTION -->
+  <main id="results-section" class="section">
+    <div class="main-content">
+      <div class="search-header">
+        <form id="searchFormResults" class="search-form compact">
+          <input type="text" id="productInputResults" placeholder="Search for a product..." required />
+          <select id="currencySelectResults" required>
+            <option value="USD">USD</option>
+            <option value="CAD">CAD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+            <option value="AUD">AUD</option>
+            <option value="INR">INR</option>
+          </select>
+          <button type="submit" class="search-btn">
+            <span class="btn-text">Search</span>
+            <span class="btn-loading" style="display: none;">Searching...</span>
+          </button>
+        </form>
+      </div>
+
+      <div id="searchInfo" class="search-info" style="display: none;">
+        <p>Search results for "<span id="searchQuery"></span>" in <span id="selectedCurrency"></span></p>
+      </div>
+
+      <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Searching for products...</p>
+      </div>
+
+      <div id="errorMessage" class="error-message" style="display: none;">
+        <p>No products found. Try a different search term.</p>
+      </div>
+
+      <div id="currencyInfo" class="currency-info" style="display: none;">
+        <p>Prices converted using simulated exchange rates for demo purposes.</p>
+      </div>
+
+      <div id="productsGrid" class="products-grid">
+        <!-- Products will be populated here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- WATCHLIST SECTION -->
+  <main id="watchlist-section" class="section">
+    <div class="main-content">
+      <div class="watchlist-header">
+        <h2>My Watchlist</h2>
+        <p>Track your favorite products and manage your budget</p>
+      </div>
+
+      <div class="budget-section">
+        <div class="budget-card">
+          <h3>Budget Tracker</h3>
+          <div class="budget-form">
+            <label for="budgetInput">Set your budget:</label>
+            <div class="budget-input-group">
+              <select id="budgetCurrency">
+                <option value="USD">USD</option>
+                <option value="CAD">CAD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="JPY">JPY</option>
+                <option value="AUD">AUD</option>
+                <option value="INR">INR</option>
+              </select>
+              <input type="number" id="budgetInput" placeholder="Enter budget amount" min="0" step="0.01">
+              <button id="setBudgetBtn" class="set-budget-btn">Set Budget</button>
+            </div>
+          </div>
+          
+          <div class="budget-display" id="budgetDisplay" style="display: none;">
+            <div class="budget-info">
+              <p><strong>Budget:</strong> <span id="budgetAmount"></span></p>
+              <p><strong>Total Cost:</strong> <span id="totalCost">0.00 USD</span></p>
+              <p><strong>Remaining:</strong> <span id="remainingBudget">0.00 USD</span></p>
+            </div>
+            <div class="budget-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <p class="progress-text" id="progressText">0% of budget used</p>
+            </div>
+            <div class="budget-alert" id="budgetAlert" style="display: none;">
+              <p>⚠️ You have exceeded your budget!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="watchlist-controls">
+        <div class="controls-left">
+          <button id="clearWatchlistBtn" class="clear-btn">Clear All</button>
+          <span class="item-count" id="itemCount">0 items</span>
+        </div>
+        <div class="controls-right">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect">
+            <option value="name">Name</option>
+            <option value="price">Price (Low to High)</option>
+            <option value="price-desc">Price (High to Low)</option>
+            <option value="date">Date Added</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="empty-watchlist" id="emptyWatchlist">
+        <div class="empty-state">
+          <h3>Your watchlist is empty</h3>
+          <p>Start adding products to track prices and manage your budget</p>
+          <button class="cta-btn" onclick="showSection('home')">Search Products</button>
+        </div>
+      </div>
+
+      <div class="watchlist-grid" id="watchlistGrid">
+        <!-- Watchlist items will be populated here -->
+      </div>
+
+      <div class="watchlist-summary" id="watchlistSummary" style="display: none;">
+        <div class="summary-card">
+          <h3>Summary</h3>
+          <div class="summary-stats">
+            <div class="stat">
+              <label>Total Items:</label>
+              <span id="summaryItems">0</span>
+            </div>
+            <div class="stat">
+              <label>Total Value:</label>
+              <span id="summaryTotal">0.00 USD</span>
+            </div>
+            <div class="stat">
+              <label>Average Price:</label>
+              <span id="summaryAverage">0.00 USD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Smart Shopper. Demo version for GitHub Pages hosting.</p>
+      <p>Full version with live APIs available at: <a href="https://github.com/bernardowusumensah/smartShopper" target="_blank">GitHub Repository</a></p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
